@@ -1,9 +1,3 @@
-
-
-
-
-
-
 package main
 
 import (
@@ -13,30 +7,39 @@ import (
 
 func main() {
 
-  fmt.Println("Please enter the first number: ")
+  fmt.Println("Please enter the value for a: ")
   var a big.Int
   fmt.Scan(&a)
-  fmt.Println("Please enter the second number: ")
+  fmt.Println("Please enter the value for b: ")
   var b big.Int
   fmt.Scan(&b)
+  fmt.Println("Please enter the value for p: ")
+  var p big.Int
+  fmt.Scan(&p)
+  fmt.Println("Please enter the value for q: ")
+  var q big.Int
+  fmt.Scan(&q)
 
-  if a.Sign() != -1 && b.Sign() != -1 && (a.Sign() != 0 || b.Sign() != 0) {
-  //if a >= 0 && b >= 0 && ( a != 0 || b != 0) {
-    d, u, v := extendedEslid(a,b)
-    fmt.Println("The gcd is: ")
-    fmt.Println(d)
-    fmt.Println(" with u: ")
-    fmt.Println(u)
-    fmt.Println(" and v: ")
-    fmt.Println(v)
+  if p.Sign() != -1 && q.Sign() != -1 && (p.Sign() != 0 || q.Sign() != 0) {
+    _, z, _ := extendedEuclid(&p, &q)
+    fmt.Println("1. z = ", z)
+    y := big.NewInt(0).Mod(big.NewInt(0).Mul(big.NewInt(0).Sub(&a, &b), z), &p)
+    fmt.Println("2. y = ", y)
+    x := big.NewInt(0).Add(big.NewInt(0).Mul(y, &q), &b)
+    fmt.Println("3. x = ", x)
   } else {
     fmt.Println("invalid input")
   }
 }
 
-func extendedEslid(a big.Int, b big.Int) (d *big.Int, ud *big.Int, vd *big.Int) {
-  c := &a
-  d = &b
+func extendedEuclid(a *big.Int, b *big.Int) (d *big.Int, ud *big.Int, vd *big.Int) {
+  c := a
+  d = b
+
+  if a.Cmp(b) < 0 {
+    c = b
+    d = a
+  }
 
   uc := big.NewInt(1)
   vc := big.NewInt(0)
